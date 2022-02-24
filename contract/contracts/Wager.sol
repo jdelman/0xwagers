@@ -9,7 +9,7 @@ contract Wager {
 
   // this isn't used computationally
   string public proposition;
-  bytes32[] public outcomes;
+  string[] public outcomes;
 
   uint256 public timeout;
   uint256 public minimumBet;
@@ -25,14 +25,14 @@ contract Wager {
   mapping(uint256 => uint256) public totalPerOutcome;
   uint256 public total;
 
-  constructor(string memory _proposition, uint256 _minimumBet,
+  constructor(string memory _proposition, string[] memory _outcomes, uint256 _minimumBet,
     uint256 _timeoutDelay, uint8 _maxNumberOfBettors, uint256 _vigBasisPoints) {
     // There must only be 2 outcomes (for now)
     require(_minimumBet > 0, 'Minimum bet must be more than zero');
-    require(_timeoutDelay > 0, 'Timeout must be greater than 0');
 
     owner = msg.sender;
     proposition = _proposition;
+    outcomes = _outcomes;
     minimumBet = _minimumBet;
     maxNumberOfBettors = _maxNumberOfBettors;
     numberOfBettors = 0;
@@ -43,6 +43,9 @@ contract Wager {
   function bet(uint256 outcome) public payable {
     require(state == States.Open, 'Wager must be open');
     require(numberOfBettors < maxNumberOfBettors, 'Too many bettors');
+    require(msg.sender != owner, 'Wager owner cannot partipate');
+    require(msg.value >= minimumBet, 'Bet must be at least the minimum');
+    require(outcome < outcomes.length, 'Invalid outcome');
 
     betAmounts[msg.sender][outcome] = msg.value;
     totalPerOutcome[outcome] += msg.value;
@@ -55,6 +58,7 @@ contract Wager {
   function close() public {
     require(state == States.Open, 'State must be open to close');
     require(msg.sender == owner, 'Only the owner can close the wager');
+
     state = States.Closed;
   }
 
@@ -63,12 +67,14 @@ contract Wager {
   function resolve(uint256 _winningOutcome) public {
     require(state == States.Closed, 'Wager must be closed to resolve');
     require(msg.sender == owner, 'Only the owner can resolve the wager');
+    require(_winningOutcome < outcomes.length, 'Invalid outcome');
 
     winningOutcome = _winningOutcome;
 
     // remove owner's cut from the total
     uint256 ownerCut = getOwnerCut();
     total -= ownerCut;
+    payable(owner).transfer(ownerCut);
 
     state = States.Resolved;
   }
@@ -78,7 +84,7 @@ contract Wager {
     uint256 amount = betAmounts[msg.sender][winningOutcome] * total
       / totalPerOutcome[winningOutcome];
     betAmounts[msg.sender][winningOutcome] = 0;
-    msg.sender.transfer(amount);
+    payable(msg.sender).transfer(amount);
   }
 
   function cancel() public {
@@ -89,12 +95,12 @@ contract Wager {
   }
 
   function refund(uint256 outcome) public {
-    // if we kept more state we wouldn't have to ask for the outcome
+    // TODO: thought: if we kept more state we wouldn't have to ask for the outcome
     require(state == States.Canceled, 'Wager must be canceled for a refund');
 
     uint256 amount = betAmounts[msg.sender][outcome];
     betAmounts[msg.sender][outcome] = 0;
-    msg.sender.transfer(amount);
+    payable(msg.sender).transfer(amount);
   }
 
   function getOwnerCut() public view returns (uint256) {
@@ -102,7 +108,19 @@ contract Wager {
     return ownerCut;
   }
 
-  // function getWagerState() external pure returns (uint8) {
-  //   return state;
-  // }
+  function getWagerState() external view returns (uint8) {
+    // why can't I just convert an enum to an int?
+    if (state == States.Open) {
+      return 0;
+    }
+    else if (state == States.Closed) {
+      return 1;
+    }
+    else if (state == States.Resolved) {
+      return 2;
+    }
+    else {
+      return 3;
+    }
+  }
 }
