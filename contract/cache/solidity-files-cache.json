@@ -1,10 +1,10 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/Users/jdelman/Dropbox/Scripts/0xwagers/contracts/Wager.sol": {
-      "lastModificationDate": 1645460666275,
-      "contentHash": "c2bdefd15c9123486dbaedc6dc0a8137",
-      "sourceName": "contracts/Wager.sol",
+    "/Users/jdelman/Dropbox/Scripts/0xwagers/contract/contracts/WagerWallet.sol": {
+      "lastModificationDate": 1646598100971,
+      "contentHash": "11fd6e83b464d248d425ac68c533354f",
+      "sourceName": "contracts/WagerWallet.sol",
       "solcConfig": {
         "version": "0.8.4",
         "settings": {
@@ -33,7 +33,7 @@
         ">=0.7.0 <0.9.0"
       ],
       "artifacts": [
-        "Wager"
+        "WagerWallet"
       ]
     }
   }

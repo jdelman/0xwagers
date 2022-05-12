@@ -2,9 +2,19 @@ name = "0xwagers"
 type = "javascript"
 
 zone_id = ""
-account_id = ""
+account_id = "f1cc5f4e4f191bd18d4c210071f9d1e0"
 route = ""
 workers_dev = true
+
+kv_namespaces = [
+  { binding = "WAGERS_KV", id = "496e6df9fa8f41429b46addea6d274f5" }
+]
+
+[env.dev]
+name = "0xwagers-dev"
+kv_namespaces = [
+  { binding = "WAGERS_KV", id = "3d1716fe4ce44bda978a96797ffac20f" }
+]
 
 [site]
 bucket = "./public"

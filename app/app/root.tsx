@@ -1,5 +1,6 @@
 import {
   Links,
+  LinksFunction,
   LiveReload,
   Meta,
   Outlet,
@@ -7,10 +8,22 @@ import {
   ScrollRestoration
 } from "remix";
 import type { MetaFunction } from "remix";
-import Header from "./components/Header";
+
+import Header from "~/components/Header";
+import ConnectWalletModal from "~/components/ConnectWalletModal";
+import { WalletContextProvider } from "./contexts/WalletContext";
+
+import styles from "./styles/app.css";
 
 export const meta: MetaFunction = () => {
-  return { title: "New Remix App" };
+  return { title: "0xwagers" };
+};
+
+export const links: LinksFunction = () => {
+  return [
+    { rel: "stylesheet", href: styles },
+    { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"},
+  ];
 };
 
 export default function App() {
@@ -21,11 +34,15 @@ export default function App() {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css" />
       </head>
-      <body>
-        <Header />
-        <Outlet />
+      <body id="root">
+        <WalletContextProvider>
+          <Header />
+          <div className="p-3 lg:px-0 mx-auto max-w-3xl pb-24 leading-loose">
+            <Outlet />
+          </div>
+          <ConnectWalletModal />
+        </WalletContextProvider>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

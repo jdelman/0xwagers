@@ -504,3 +504,6 @@ testeth
 node_modules
 bin_output
 logs
+
+# hardhat
+cache/
