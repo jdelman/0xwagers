@@ -1,9 +1,13 @@
 import {
   ethers,
   providers,
-  Contract
+  Contract,
+  utils
 } from "ethers";
 import { NetworkChainDetails, TNetworkName } from "./Networks";
+
+// TODO: WMW-specific, move
+import WagerMultiWalletSpec from "~/contracts/WagerMultiWallet.json";
 
 // import {} from '@metamask/providers';
 
@@ -28,26 +32,43 @@ export enum EthereumCommands {
 class WalletManager {
   public provider?: providers.Web3Provider;
   public contracts: { [name: string]: Contract };
-  public network?: TNetworkName;
+  public topicMappings: {
+    [prop: string]: {
+      [prop: string]: string
+    }
+  };
+  public _network?: TNetworkName | undefined;
 
   private _signer?: providers.JsonRpcSigner;
   private _alchemyProvider: providers.AlchemyProvider;
-  private _listeners: Array<(type: string, event: any) => void>;
+  private _listeners: Array<{type: string, event: any}>;
 
-  
   constructor() {
     this._listeners = [];
     this._alchemyProvider = new ethers.providers.AlchemyProvider(
       'homestead',
       'mH_MTHV-oDh4b9tRba5NtUD8w-GKfpXr' // TODO: make an environment variable
     );
-    
+
     this.contracts = {};
-    this.network = undefined;
+    this.topicMappings = {};
+    this._network = undefined;
   }
 
   public get signer() {
     return this._signer!
+  }
+
+  public set network(network: string) {
+    this._network = network as TNetworkName;
+    if (network) {
+      console.log('network=', network);
+      this.loadDefaultContracts();
+    }
+  }
+
+  public get network() {
+    return this._network! as TNetworkName;
   }
 
   subscribe() {
@@ -112,6 +133,22 @@ class WalletManager {
     );
 
     this.contracts[name] = contract;
+
+    // create event/topic mappings
+    this.topicMappings[name] = {};
+    for (const entry of abi) {
+      if (entry.type === 'event') {
+        const joinedArgs = entry.inputs
+          .map((input: any) => input.internalType).join(',');
+          const eventName = entry.name;
+          const eventSignature = `${eventName}(${joinedArgs})`;
+          console.log('using event signature=', eventSignature);
+          const eventSignatureHashed = utils.keccak256(
+            utils.toUtf8Bytes(eventSignature)
+          );
+          this.topicMappings[name][eventSignatureHashed] = eventName;
+      }
+    }
   }
 
   async sendTransaction(transaction: any): Promise<boolean> {
@@ -205,6 +242,16 @@ class WalletManager {
       return false;
     }
   }
+
+  // WagerMultiWallet implementation, should be a diff class
+
+  loadDefaultContracts() {
+    const address = WagerMultiWalletSpec.contractAddresses[this.network!.toLowerCase()];
+    console.log('loading WagerMultiWallet on network', this.network, 'with address', address);
+    this.loadContract('WagerMultiWallet', address, WagerMultiWalletSpec.abi);
+  }
+
+
 }
 
 export default (new WalletManager());

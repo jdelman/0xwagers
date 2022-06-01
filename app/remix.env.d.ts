@@ -4,4 +4,5 @@
 
 interface Window {
   ethereum: any;
+  Ipfs: any;
 }

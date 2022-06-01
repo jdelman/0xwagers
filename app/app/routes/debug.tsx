@@ -1,10 +1,10 @@
-import {useCallback, useEffect, useContext} from 'react';
+import {useCallback, useEffect, useContext, useState} from 'react';
 import { BigNumber, BigNumber as BN, utils, ethers } from 'ethers';
 
 import Wallet, { TWalletInfo } from '~/wallet/Wallet';
 import { WalletContext } from '~/contexts/WalletContext';
 import TransactionError from '~/components/TransactionError';
-import {abi as WagerWalletAbi} from '~/contracts/WagerWallet';
+import {abi as WagerMultiWalletAbi, contractAddresses} from '~/contracts/WagerMultiWallet';
 import DebugContract from '~/components/debug/DebugContract';
 import { TAbiItem } from '~/types/solidity';
 
@@ -63,7 +63,7 @@ export default function Debug() {
 
     const contract = new ethers.Contract(
       dataObj.contractAddress,
-      WagerWalletAbi,
+      WagerMultiWalletAbi,
       Wallet.signer
     );
 
@@ -84,6 +84,27 @@ export default function Debug() {
     // TODO: use abi outputs to parse
 
     console.log('success!', String(tx));
+  };
+
+  const [events, setEvents] = useState([]);
+  const getLogs = async (id: Number) => {
+    // load WagerMultiWallet contract
+    const address = contractAddresses[walletInfo.network!];
+    Wallet.loadContract('WagerMultiWallet', address, WagerMultiWalletAbi);
+
+    // ethers.js... where is the fucking help on this one?
+    const topic = `0x${String(id).padStart(64, '0')}`;
+    console.log('topic=', topic);
+
+    const events = await 
+      Wallet.contracts.WagerMultiWallet.queryFilter(
+        {topics: [
+          [],
+          topic
+        ]}
+      );
+    console.log('events=', events);
+    setEvents(events);
   };
 
   useEffect(() => {
@@ -136,10 +157,28 @@ export default function Debug() {
       </div>
       <hr className="mt-6 mb-6" />
       <div className="mt-3">
+        <p>fetch all logs for current contract</p>
+        <div id="logs">
+          {
+            events.map((event, i) => (
+              <div
+                key={i}
+              >{JSON.stringify(event)}</div>
+            ))
+          }
+        </div>
+        <button
+          type="button"
+          onClick={() => getLogs(2)}
+          className="rounded-md p-2 outline outline-1 hover:outline-indigo-800"
+        >fetch</button>
+      </div>
+      <hr className="mt-6 mb-6" />
+      <div className="mt-3">
         <p>call a method on a wager contract</p>
         <DebugContract
           formId="wagerContractForm"
-          abi={WagerWalletAbi as TAbiItem[]}
+          abi={WagerMultiWalletAbi as TAbiItem[]}
           onSubmit={onSubmitWagerContractForm}
           defaultContractAddress={"0xf29c57A737CA5a74F795B8Ed95e06e0655C1C014"}
         />

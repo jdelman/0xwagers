@@ -9,8 +9,8 @@ export interface WagerItem {
   proposition: string;
   outcomes: Array<string>;
   state: STATE;
-  endsAt: number;
-  ownerPct: number;
+  timeout: number;
+  ownersCut: number;
   winningOutcome: string;
   metadataUri: string;
 };

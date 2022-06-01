@@ -3,8 +3,8 @@ import type { MouseEvent, ChangeEvent } from "react";
 
 export default function EditOutcomes() {
   const [outcomes, setOutcomes] = useState([
-    'True',
-    'False'
+    'Yes',
+    'No'
   ]);
 
   const addOutcome = () => {

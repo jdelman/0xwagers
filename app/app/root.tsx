@@ -34,6 +34,10 @@ export default function App() {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
+        <script
+          src="https://cdn.jsdelivr.net/npm/ipfs/dist/index.min.js"
+          defer
+        ></script>
       </head>
       <body id="root">
         <WalletContextProvider>

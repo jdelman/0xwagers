@@ -54,9 +54,11 @@ export const WalletContextProvider = (props: WalletContextProviderProps) => {
     Wallet.addListener((type: string, event: any) => {
       const newInfo: TWalletInfo = {};
       if (type === 'network') {
-        newInfo.network = NetworkNameMap[event.name as TNetworkName]
+        const network = NetworkNameMap[event.name as TNetworkName];
+        newInfo.network = network;
         newInfo.isConnected = true;
         newInfo.error = '';
+        Wallet.network = network;
         getWalletAddress();
       }
       else if (type === 'disconnect') {
@@ -85,4 +87,4 @@ export const WalletContextProvider = (props: WalletContextProviderProps) => {
       { props.children }
     </WalletContext.Provider>
   );
-}
+} 

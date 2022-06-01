@@ -19,8 +19,9 @@
   "dependencies": {
     "@remix-run/cloudflare-workers": "^1.2.2",
     "@remix-run/react": "^1.2.2",
+    "electron": "^18.2.3",
     "ethers": "^5.5.4",
-    "ipfs-core": "^0.14.1",
+    "ipfs-core": "^0.14.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-modal": "^3.14.4",

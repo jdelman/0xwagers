@@ -1,27 +1,69 @@
 import {BigNumber, utils} from 'ethers';
+import {readFile, writeFile} from 'fs/promises';
+import {join, dirname} from 'path';
+import {fileURLToPath} from 'url';
 
-async function main() {
-  console.log('')
+// __dirname/__filename not available in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+async function deploy(contractName) {
   const [deployer] = await ethers.getSigners();
 
-  console.log('Deploying Wager contract with account:', deployer.address);
-  console.log('Account balance:', (await deployer.getBalance()));
+  console.log('Current account balance:', (await deployer.getBalance()));
 
-  const Wager = await ethers.getContractFactory('WagerWallet');
+  const Factory = await ethers.getContractFactory(contractName);
+  console.log(`Deploying ${contractName} contract with account: ${deployer.address}`);
+  const gas = await ethers.provider.estimateGas(
+    Factory.getDeployTransaction().data
+  );
+  console.log(`Estimated gas: ${gas}`);
+  console.log('...');
+  const contract = await Factory.deploy();
+  console.log('tx=', contract);
+  await contract.deployed();
+  console.log('Contract address:', contract.address);
 
-  // test wager
-  const wager = await Wager.deploy(
-    BigNumber.from('1646600766919'),
-    '100',
-    'empty');
-  console.log('Wager address:', wager.address);
-  console.log('estimate gas for bet:', await wager.estimateGas.bet(0, { value: utils.parseEther('0.001') }));
-
-  const tx = await wager.bet.call(0, { value: utils.parseEther('0.001')} );
-  console.log('bet result:', tx);
+  return contract.address;
 }
 
-main()
+async function copy(contractName, address) {
+  const { HARDHAT_NETWORK: network } = process.env;
+
+  // contract ABI & metadata lives in ./artifacts/contracts/
+  const pathToAbi = join(__dirname, '..', 'artifacts',
+    'contracts', `${contractName}.sol`, `${contractName}.json`);
+  
+  let abiJson = await readFile(pathToAbi);
+  abiJson = JSON.parse(abiJson);
+
+  // existing JSON
+  const pathToMetadata = join(__dirname, '..', '..',
+    'app', 'app', 'contracts', `${contractName}.json`);
+
+  let currentMeta = await readFile(pathToMetadata);
+  currentMeta = JSON.parse(currentMeta);
+
+  const newOutput = {
+    abi: abiJson.abi,
+    contractAddresses: {
+      ...currentMeta.contractAddresses,
+      [network]: address
+    }
+  };
+
+  // something like ../0xwagers/app/app
+  await writeFile(pathToMetadata, JSON.stringify(newOutput, null, 2));
+
+  console.log('wrote updated ABI & network address to', pathToMetadata);
+}
+
+async function main(contractName) {
+  const contractAddress = await deploy(contractName);
+  await copy(contractName, contractAddress);
+}
+
+main('WagerMultiWallet')
   .then(() => process.exit(0))
   .catch((error) => {
     console.error('Error deploying contract:', error);

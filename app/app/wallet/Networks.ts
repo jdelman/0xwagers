@@ -30,9 +30,21 @@ export const NetworkChainDetails: {[prop: string]: any} = {
   },
   'homestead': {
     chainId: '0x01',
+    blockExplorerUrls: ['https://etherscan.io/'],
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18,
+    }
   },
   'ropsten': {
     chainId: '0x03',
+    blockExplorerUrls: ['https://ropsten.etherscan.io/'],
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18,
+    }
   },
 };
 

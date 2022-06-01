@@ -1,35 +1,17 @@
 import {useState, useCallback, useEffect} from "react";
-import { Form, ActionFunction, useActionData, useTransition, useFetcher } from "remix";
+import { useNavigate } from "react-router-dom";
 
 import EditOutcomes from '~/components/outcomes/EditOutcomes';
 import FallbackToConnectWalletButton from "~/components/FallbackToConnectWalletButton";
 import Timeout from "~/components/Timeout";
 import OwnersCut from "~/components/OwnersCut";
-import Wallet from "~/wallet/Wallet";
-import {WagerWalletFactory} from "~/contracts/WagerWallet";
 
+import {mintWager} from '~/wallet/Actions';
 import useWallet from "~/hooks/useWallet";
 
-export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-  console.log('got formdata=', Object.fromEntries(formData));
-  return ['1', '2'];
-};
-
-function submit(formData) {
-
-}
-
-export default function CreateWager() {
-  // const result = useActionData();
-  // console.log('result=', result);
-  // const transition = useTransition();
-  const fetcher = useFetcher();
-
-  useEffect(() => {
-    const {type, submission, state, data} = fetcher;
-    console.log('fetcher=', fetcher);
-  }, [fetcher]);
+export default function MintWager() {
+  const navigate = useNavigate();
+  const {network} = useWallet();
 
   const onSubmit = async (event: SubmitEvent) => {
     event.preventDefault();
@@ -45,32 +27,42 @@ export default function CreateWager() {
         data[key].push(value);
       }
       else {
-        data[key] = value;
+
+        if (key === 'timeout') {
+          data[key] = Date.now() + (Number(value) * 24 * 60 * 60 * 60 * 1000);
+        }
+        else if (key === 'ownersCut') {
+          data[key] = Number(value) * 1e5;
+        }
+        else {
+          data[key] = value;
+        }
       }
-
-      
     }
     
-    // 
+    // TODO: validate
 
-    //
-    let deployTx;
-    try {
-      const factory = WagerWalletFactory.connect(Wallet.signer);
-      deployTx = await factory.deploy(
-        
-      );
-    } catch (e) {
-      console.error('error posting');
+    /*
+      this will return the ID of the wager - then we need
+      to pass on the metadata to KV storage
+    */
+    const wagerId = await mintWager({
+      network,
+      ...data
+    });
+    if (wagerId === '0') {
+      // there was an error
+      return;
     }
 
-    
+    // send user to the page
+    navigate(`/wager/${wagerId}`);
   };
 
   return (
     <section>
       <h2 className="text-xl mb-4 font-semibold">create a wager</h2>
-      <form id="new_wager">
+      <form id="new_wager" disabled>
         <fieldset className="mb-3">
           <label
             htmlFor="proposition"
@@ -89,7 +81,7 @@ export default function CreateWager() {
           <FallbackToConnectWalletButton
             id="submit"
             type="submit"
-            title="Deploy Wager"
+            title="Mint Wager"
             onClick={onSubmit}
             className="px-3 py-1.5 w-full rounded-lg outline outline-indigo-200 hover:outline-indigo-400 focus:outline-2 focus:outline-indigo-800 transition"
           />
