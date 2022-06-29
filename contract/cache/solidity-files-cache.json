@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/jdelman/Dropbox/Scripts/0xwagers/contract/contracts/WagerMultiWallet.sol": {
-      "lastModificationDate": 1654652421886,
-      "contentHash": "d45930f64758b682bc26c3f21aefa011",
+      "lastModificationDate": 1654890066579,
+      "contentHash": "fb78db490d4f20cb6a14452e8567b307",
       "sourceName": "contracts/WagerMultiWallet.sol",
       "solcConfig": {
         "version": "0.8.4",

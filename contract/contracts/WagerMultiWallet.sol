@@ -216,7 +216,7 @@ contract WagerMultiWallet {
   
     uint256 amount = wager.betAmounts[msg.sender][outcome];
     wager.betAmounts[msg.sender][outcome] = 0;
-    
+
     _sendERC20(index, amount, msg.sender);
   }
 
