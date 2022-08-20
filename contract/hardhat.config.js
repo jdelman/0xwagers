@@ -1,4 +1,5 @@
-require("@nomiclabs/hardhat-waffle");
+require("@nomicfoundation/hardhat-chai-matchers");
+require("@nomiclabs/hardhat-ethers");
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
@@ -7,8 +8,8 @@ require("@nomiclabs/hardhat-waffle");
 module.exports = {
   solidity: "0.8.4",
   networks: {
-    ropsten: {
-      url: 'https://eth-ropsten.alchemyapi.io/v2/rVfnb68OlzTvS4koKi4CGGSc9w8ZczzO',
+    goerli: {
+      url: 'https://eth-goerli.g.alchemy.com/v2/zz2bJe58eeIWQGcrF2I9vxwYPjtqVHQh',
       accounts: [
         '55daece4c961b430e75eeedc4c2642e497541d3569e11377a8397f3ad47e7216',
       ]
