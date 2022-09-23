@@ -13,6 +13,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
       uint256 amount
     ) external returns (bool);
 
+  2022-09-20: associate ERC-721 with position
  */
 
 /** 
@@ -28,8 +29,6 @@ contract WagerMultiWallet {
     address owner;
     uint256 endsAt;
 
-    // Don't need a hash because we'll be using an immutable IPFS URI
-    // string metadataURI;
     uint32 vigBasisPoints;
     uint8 winningOutcome;
     mapping(address => mapping(uint8 => uint256)) betAmounts;
@@ -56,7 +55,6 @@ contract WagerMultiWallet {
   function mintWager(
     uint256 _endsAt,
     uint32 _vigBasisPoints,
-    // string memory _metadataURI,
     string memory _proposition,
     bytes32[] memory _outcomes,
     address _erc20Address
@@ -67,7 +65,6 @@ contract WagerMultiWallet {
     wager.owner = msg.sender;
     wager.vigBasisPoints = _vigBasisPoints;
     wager.endsAt = _endsAt;
-    // wager.metadataURI = _metadataURI;
     wager.state = States.Open;
     wager.proposition = _proposition;
     wager.outcomes = _outcomes;
