@@ -1,3 +1,4 @@
+require("@typechain/hardhat");
 require("@nomicfoundation/hardhat-chai-matchers");
 require("@nomiclabs/hardhat-ethers");
 
