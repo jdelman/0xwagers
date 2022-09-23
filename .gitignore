@@ -509,4 +509,6 @@ bin_output
 logs
 
 # hardhat
-cache/
+contract/cache/
+contract/artifacts/
+
