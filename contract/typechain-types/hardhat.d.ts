@@ -13,9 +13,17 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "Ownable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Ownable__factory>;
+    getContractFactory(
       name: "ERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC20__factory>;
+    getContractFactory(
+      name: "IERC20Permit",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20Permit__factory>;
     getContractFactory(
       name: "IERC20Metadata",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -25,6 +33,46 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC20__factory>;
     getContractFactory(
+      name: "ERC721",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721__factory>;
+    getContractFactory(
+      name: "ERC721Burnable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721Burnable__factory>;
+    getContractFactory(
+      name: "ERC721Enumerable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721Enumerable__factory>;
+    getContractFactory(
+      name: "IERC721Enumerable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721Enumerable__factory>;
+    getContractFactory(
+      name: "IERC721Metadata",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721Metadata__factory>;
+    getContractFactory(
+      name: "IERC721",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721__factory>;
+    getContractFactory(
+      name: "IERC721Receiver",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721Receiver__factory>;
+    getContractFactory(
+      name: "ERC165",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC165__factory>;
+    getContractFactory(
+      name: "IERC165",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC165__factory>;
+    getContractFactory(
+      name: "IWagerTicketRenderer",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IWagerTicketRenderer__factory>;
+    getContractFactory(
       name: "WagerCoin",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.WagerCoin__factory>;
@@ -32,12 +80,26 @@ declare module "hardhat/types/runtime" {
       name: "WagerMultiWallet",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.WagerMultiWallet__factory>;
+    getContractFactory(
+      name: "WagerTicket",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.WagerTicket__factory>;
 
+    getContractAt(
+      name: "Ownable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Ownable>;
     getContractAt(
       name: "ERC20",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.ERC20>;
+    getContractAt(
+      name: "IERC20Permit",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20Permit>;
     getContractAt(
       name: "IERC20Metadata",
       address: string,
@@ -49,6 +111,56 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERC20>;
     getContractAt(
+      name: "ERC721",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC721>;
+    getContractAt(
+      name: "ERC721Burnable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC721Burnable>;
+    getContractAt(
+      name: "ERC721Enumerable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC721Enumerable>;
+    getContractAt(
+      name: "IERC721Enumerable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC721Enumerable>;
+    getContractAt(
+      name: "IERC721Metadata",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC721Metadata>;
+    getContractAt(
+      name: "IERC721",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC721>;
+    getContractAt(
+      name: "IERC721Receiver",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC721Receiver>;
+    getContractAt(
+      name: "ERC165",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC165>;
+    getContractAt(
+      name: "IERC165",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC165>;
+    getContractAt(
+      name: "IWagerTicketRenderer",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IWagerTicketRenderer>;
+    getContractAt(
       name: "WagerCoin",
       address: string,
       signer?: ethers.Signer
@@ -58,6 +170,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.WagerMultiWallet>;
+    getContractAt(
+      name: "WagerTicket",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.WagerTicket>;
 
     // default types
     getContractFactory(

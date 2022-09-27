@@ -1,0 +1,15 @@
+{
+  "WO1": "Wager must be open",
+  "BGT0": "Bet must be greater than zero",
+  "MBERC20": "Must be an ERC-20 style wager",
+  "SOC": "State must be open to close",
+  "OOC": "Only the owner can close the wager",
+  "WCR": "Wager must be closed to resolve",
+  "OOR": "Only the owner can resolve the wager",
+  "IO": "Invalid outcome",
+  "WMBR": "Wager must be resolved",
+  "MOT": "Must own token",
+  "DW": "Didn't win",
+  "CCR": "Wager cannot be canceled once resolved",
+  "CCO": "Wager must be closed or past expiration to cancel",
+}

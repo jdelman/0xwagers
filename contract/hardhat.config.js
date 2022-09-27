@@ -1,6 +1,7 @@
 require("@typechain/hardhat");
 require("@nomicfoundation/hardhat-chai-matchers");
 require("@nomiclabs/hardhat-ethers");
+require('hardhat-contract-sizer');
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
