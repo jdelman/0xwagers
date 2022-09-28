@@ -4,12 +4,12 @@ on: [push]
 jobs:
   contracts:
     runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - run: npm ci
-        working-directory: ./contract
-      - run: npm test
-        working-directory: ./contract
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - run: npm ci
+      working-directory: ./contract
+    - run: npm test
+      working-directory: ./contract
