@@ -2,6 +2,8 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 import "./IWagerTicketRenderer.sol";
+
+// TODO: we only need encode from this contract, not decode - should remove
 import "base64-sol/base64.sol";
 
 contract WagerTicket {

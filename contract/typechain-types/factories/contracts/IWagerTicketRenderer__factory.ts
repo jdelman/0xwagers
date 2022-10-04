@@ -40,14 +40,9 @@ const _abi = [
             type: "uint8",
           },
           {
-            internalType: "bool",
-            name: "isERC20",
-            type: "bool",
-          },
-          {
-            internalType: "string",
-            name: "symbol",
-            type: "string",
+            internalType: "address",
+            name: "erc20Token",
+            type: "address",
           },
           {
             internalType: "uint8",
@@ -55,9 +50,9 @@ const _abi = [
             type: "uint8",
           },
           {
-            internalType: "string",
+            internalType: "bytes32",
             name: "outcome",
-            type: "string",
+            type: "bytes32",
           },
         ],
         internalType: "struct WagerPosition",

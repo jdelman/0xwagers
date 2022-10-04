@@ -37,20 +37,18 @@ export interface WagerMultiWalletInterface extends utils.Interface {
     "burn(uint256)": FunctionFragment;
     "cancel(uint256)": FunctionFragment;
     "claim(uint256,uint256)": FunctionFragment;
-    "claimERC20(uint256,uint256)": FunctionFragment;
     "close(uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getOwnerCut(uint256)": FunctionFragment;
+    "getWager(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "mintWager(uint256,uint32,string,bytes32[],address)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "refund(uint256,uint256)": FunctionFragment;
-    "refundERC20(uint256,uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "resolve(uint256,uint8)": FunctionFragment;
-    "resolveERC20(uint256,uint8)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
@@ -74,20 +72,18 @@ export interface WagerMultiWalletInterface extends utils.Interface {
       | "burn"
       | "cancel"
       | "claim"
-      | "claimERC20"
       | "close"
       | "getApproved"
       | "getOwnerCut"
+      | "getWager"
       | "isApprovedForAll"
       | "mintWager"
       | "name"
       | "owner"
       | "ownerOf"
       | "refund"
-      | "refundERC20"
       | "renounceOwnership"
       | "resolve"
-      | "resolveERC20"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
@@ -135,10 +131,6 @@ export interface WagerMultiWalletInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "claimERC20",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "close",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -148,6 +140,10 @@ export interface WagerMultiWalletInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getOwnerCut",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getWager",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -175,19 +171,11 @@ export interface WagerMultiWalletInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "refundERC20",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "resolve",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "resolveERC20",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -256,7 +244,6 @@ export interface WagerMultiWalletInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "cancel", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "claimERC20", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "close", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
@@ -266,6 +253,7 @@ export interface WagerMultiWalletInterface extends utils.Interface {
     functionFragment: "getOwnerCut",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getWager", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
     data: BytesLike
@@ -276,18 +264,10 @@ export interface WagerMultiWalletInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "refund", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "refundERC20",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "resolve", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "resolveERC20",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "safeTransferFrom(address,address,uint256)",
     data: BytesLike
@@ -520,12 +500,6 @@ export interface WagerMultiWallet extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    claimERC20(
-      index: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     close(
       index: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -540,6 +514,35 @@ export interface WagerMultiWallet extends BaseContract {
       index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
+
+    getWager(
+      index: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        string,
+        BigNumber,
+        number,
+        number,
+        BigNumber,
+        number,
+        BigNumber[],
+        string,
+        string[],
+        string
+      ] & {
+        _owner: string;
+        _endsAt: BigNumber;
+        _vigBasisPoints: number;
+        _winningOutcome: number;
+        _total: BigNumber;
+        _state: number;
+        _totalsPerOutcome: BigNumber[];
+        _proposition: string;
+        _outcomes: string[];
+        _erc20Token: string;
+      }
+    >;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -571,23 +574,11 @@ export interface WagerMultiWallet extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    refundERC20(
-      index: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     resolve(
-      index: PromiseOrValue<BigNumberish>,
-      _winningOutcome: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    resolveERC20(
       index: PromiseOrValue<BigNumberish>,
       _winningOutcome: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -638,7 +629,7 @@ export interface WagerMultiWallet extends BaseContract {
     ): Promise<[BigNumber]>;
 
     tokenURI(
-      tokenId: PromiseOrValue<BigNumberish>,
+      _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
@@ -697,12 +688,6 @@ export interface WagerMultiWallet extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  claimERC20(
-    index: PromiseOrValue<BigNumberish>,
-    tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   close(
     index: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -717,6 +702,35 @@ export interface WagerMultiWallet extends BaseContract {
     index: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  getWager(
+    index: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<
+    [
+      string,
+      BigNumber,
+      number,
+      number,
+      BigNumber,
+      number,
+      BigNumber[],
+      string,
+      string[],
+      string
+    ] & {
+      _owner: string;
+      _endsAt: BigNumber;
+      _vigBasisPoints: number;
+      _winningOutcome: number;
+      _total: BigNumber;
+      _state: number;
+      _totalsPerOutcome: BigNumber[];
+      _proposition: string;
+      _outcomes: string[];
+      _erc20Token: string;
+    }
+  >;
 
   isApprovedForAll(
     owner: PromiseOrValue<string>,
@@ -748,23 +762,11 @@ export interface WagerMultiWallet extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  refundERC20(
-    index: PromiseOrValue<BigNumberish>,
-    tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   renounceOwnership(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   resolve(
-    index: PromiseOrValue<BigNumberish>,
-    _winningOutcome: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  resolveERC20(
     index: PromiseOrValue<BigNumberish>,
     _winningOutcome: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -815,7 +817,7 @@ export interface WagerMultiWallet extends BaseContract {
   ): Promise<BigNumber>;
 
   tokenURI(
-    tokenId: PromiseOrValue<BigNumberish>,
+    _tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>;
 
@@ -874,12 +876,6 @@ export interface WagerMultiWallet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    claimERC20(
-      index: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     close(
       index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -894,6 +890,35 @@ export interface WagerMultiWallet extends BaseContract {
       index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getWager(
+      index: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        string,
+        BigNumber,
+        number,
+        number,
+        BigNumber,
+        number,
+        BigNumber[],
+        string,
+        string[],
+        string
+      ] & {
+        _owner: string;
+        _endsAt: BigNumber;
+        _vigBasisPoints: number;
+        _winningOutcome: number;
+        _total: BigNumber;
+        _state: number;
+        _totalsPerOutcome: BigNumber[];
+        _proposition: string;
+        _outcomes: string[];
+        _erc20Token: string;
+      }
+    >;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -925,21 +950,9 @@ export interface WagerMultiWallet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    refundERC20(
-      index: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     resolve(
-      index: PromiseOrValue<BigNumberish>,
-      _winningOutcome: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    resolveERC20(
       index: PromiseOrValue<BigNumberish>,
       _winningOutcome: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -990,7 +1003,7 @@ export interface WagerMultiWallet extends BaseContract {
     ): Promise<BigNumber>;
 
     tokenURI(
-      tokenId: PromiseOrValue<BigNumberish>,
+      _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -1137,12 +1150,6 @@ export interface WagerMultiWallet extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    claimERC20(
-      index: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     close(
       index: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1154,6 +1161,11 @@ export interface WagerMultiWallet extends BaseContract {
     ): Promise<BigNumber>;
 
     getOwnerCut(
+      index: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getWager(
       index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -1188,23 +1200,11 @@ export interface WagerMultiWallet extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    refundERC20(
-      index: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     resolve(
-      index: PromiseOrValue<BigNumberish>,
-      _winningOutcome: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    resolveERC20(
       index: PromiseOrValue<BigNumberish>,
       _winningOutcome: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1255,7 +1255,7 @@ export interface WagerMultiWallet extends BaseContract {
     ): Promise<BigNumber>;
 
     tokenURI(
-      tokenId: PromiseOrValue<BigNumberish>,
+      _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1315,12 +1315,6 @@ export interface WagerMultiWallet extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    claimERC20(
-      index: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     close(
       index: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1332,6 +1326,11 @@ export interface WagerMultiWallet extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getOwnerCut(
+      index: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getWager(
       index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -1366,23 +1365,11 @@ export interface WagerMultiWallet extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    refundERC20(
-      index: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     resolve(
-      index: PromiseOrValue<BigNumberish>,
-      _winningOutcome: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    resolveERC20(
       index: PromiseOrValue<BigNumberish>,
       _winningOutcome: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1433,7 +1420,7 @@ export interface WagerMultiWallet extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     tokenURI(
-      tokenId: PromiseOrValue<BigNumberish>,
+      _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

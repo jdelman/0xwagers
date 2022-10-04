@@ -11,6 +11,7 @@ describe('Wager contract', function() {
   let addr2;
   let addr3;
   let wagerId;
+  let tokenId;
   let wagerContractAddress;
 
   before(async function() {
@@ -36,9 +37,10 @@ describe('Wager contract', function() {
       );
       const wager = await wagerTx.wait();
 
-      const mintEvent = wager.events.find((event) => event.event === 'MintedWager');
-      const idHex = mintEvent.topics[1];
-      wagerId = idHex;
+      const mintedWagerEvent = wager.events.find((event) => event.event === 'MintedWager');
+      const mintedTicketEvent = wager.events.find((event) => event.event === 'Transfer');
+      wagerId = mintedWagerEvent.topics[1];
+      tokenId = mintedTicketEvent.topics[3];
     });
 
     it('Do not allow a bet below the minimum', async function() {

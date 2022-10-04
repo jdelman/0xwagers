@@ -27,10 +27,9 @@ export type WagerPositionStruct = {
   winningOutcome: PromiseOrValue<BigNumberish>;
   total: PromiseOrValue<BigNumberish>;
   state: PromiseOrValue<BigNumberish>;
-  isERC20: PromiseOrValue<boolean>;
-  symbol: PromiseOrValue<string>;
+  erc20Token: PromiseOrValue<string>;
   userPosition: PromiseOrValue<BigNumberish>;
-  outcome: PromiseOrValue<string>;
+  outcome: PromiseOrValue<BytesLike>;
 };
 
 export type WagerPositionStructOutput = [
@@ -39,7 +38,6 @@ export type WagerPositionStructOutput = [
   number,
   BigNumber,
   number,
-  boolean,
   string,
   number,
   string
@@ -49,15 +47,14 @@ export type WagerPositionStructOutput = [
   winningOutcome: number;
   total: BigNumber;
   state: number;
-  isERC20: boolean;
-  symbol: string;
+  erc20Token: string;
   userPosition: number;
   outcome: string;
 };
 
 export interface WagerTicketInterface extends utils.Interface {
   functions: {
-    "buildSVGBase64((uint256,string,uint8,uint256,uint8,bool,string,uint8,string))": FunctionFragment;
+    "buildSVGBase64((uint256,string,uint8,uint256,uint8,address,uint8,bytes32))": FunctionFragment;
   };
 
   getFunction(nameOrSignatureOrTopic: "buildSVGBase64"): FunctionFragment;

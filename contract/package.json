@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "hardhat test",
+    "size-contracts": "npx hardhat size-contracts",
     "deploy-ropsten": "npx hardhat run --network ropsten scripts/deploy.mjs"
   },
   "keywords": [],
@@ -22,6 +23,7 @@
     "ethers": "^5.5.4",
     "hardhat": "^2.8.4",
     "hardhat-contract-sizer": "^2.6.1",
+    "hardhat-gas-reporter": "^1.0.9",
     "ts-node": "^10.5.0",
     "typechain": "^8.1.0",
     "typescript": "^4.5.5"

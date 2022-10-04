@@ -1,7 +1,9 @@
 require("@typechain/hardhat");
 require("@nomicfoundation/hardhat-chai-matchers");
 require("@nomiclabs/hardhat-ethers");
+
 require('hardhat-contract-sizer');
+require('hardhat-gas-reporter');
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
@@ -34,5 +36,10 @@ module.exports = {
       enabled: true,
       runs: 200,
     }
+  },
+  gasReporter: {
+    enabled: true,
+    currency: 'USD',
+    gasPrice: 15
   }
 };

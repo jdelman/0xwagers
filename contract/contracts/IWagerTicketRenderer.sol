@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
+import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+
 enum States { Invalid, Open, Closed, Resolved, Canceled }
 
 struct WagerPosition {
@@ -11,12 +13,11 @@ struct WagerPosition {
   uint8 winningOutcome;
   uint256 total;
   States state;
-  bool isERC20;
-  string symbol;
+  address erc20Token;
 
   // User level fields
   uint8 userPosition;
-  string outcome;
+  bytes32 outcome;
 }
 
 interface IWagerTicketRenderer {
