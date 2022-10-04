@@ -511,4 +511,5 @@ logs
 # hardhat
 contract/cache/
 contract/artifacts/
-
+contract/typechain-types/
+contract/contracts_ignore/
